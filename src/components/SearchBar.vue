@@ -1,8 +1,11 @@
 <template>
     <div id="searchBar">
         <form @submit="searchStock">
-            <input type="text" v-model="userInput" placeholder="Enter a stock name or ticker">
+            <input type="text" list="stocks" v-model="userInput" placeholder="Enter a stock name or ticker">
             <input type="submit" value="Search" class="btn">
+            <datalist id="stocks">
+                <option v-for="ticker in tickersAndCompanies" v-bind:key="ticker"> {{ticker}} </option>
+            </datalist>
         </form>
         {{ userInput }}
     </div>
@@ -15,7 +18,13 @@ export default {
     name: "SearchBar",
     data() {
         return {
-            userInput: ''
+            userInput: '',
+            tickersAndCompanies: [
+                "AAPL - Apple Inc." ,
+                "FB - Facebook Inc." ,
+                "AMZN - Amazon Inc." ,
+                "MSFT - Microsoft Inc." 
+            ]
         }
     },
     methods: {
