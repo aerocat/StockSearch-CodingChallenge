@@ -19,25 +19,37 @@ export default {
     data() {
         return {
             userInput: '',
-            tickersAndCompanies: [
-                "AAPL - Apple Inc." ,
-                "FB - Facebook Inc." ,
-                "AMZN - Amazon Inc." ,
-                "MSFT - Microsoft Inc." 
-            ]
+            tickersAndCompanies: []
         }
+    },
+    created: function () {
+        // let lst = [
+        //             "AAPL - Apple Inc." ,
+        //             "FB - Facebook Inc." ,
+        //             "AMZN - Amazon Inc." ,
+        //             "MSFT - Microsoft Inc." ]
+        
+        let url = `http://localhost:3000/api/companies`;
+        axios.get(url)
+            .then(res => {
+                this.tickersAndCompanies = res.data;
+            })
+            .catch(err => console.log(err));
+
+        // I could use a foreach or map to filter/format data how I want it
+        // ...
+
+        // this.tickersAndCompanies = lst;
     },
     methods: {
         searchStock(e) {
             e.preventDefault(); // preventing default form behavior (sending data to a file)
-            let url = `https://api.iextrading.com/1.0/stock/${this.userInput}/chart/1m`
+            let url = `http://localhost:3000/api/${this.userInput}`;
             axios.get(url)
             .then(res => {
                 this.$emit('received-stock-data', res.data);
             })
-            .catch(err =>{
-                console.log(err)
-            });
+            .catch(err => console.log(err));
             this.userInput = '';
         }
     }
