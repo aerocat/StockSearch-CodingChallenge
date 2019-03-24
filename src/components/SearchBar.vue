@@ -22,10 +22,10 @@
                         v-bind:key="index" 
                         @click="setResult(result)"
                         class="search-result"
-                        v-bind:class="{ 'is-active': index === arrowCounter }"> {{ index }} {{ result }} </li>
+                        v-bind:class="{ 'is-active': index === arrowCounter }"> {{ result }} </li>
             </ul>
         </div>
-        {{ userInput }}
+        <h3> userInput is: {{ userInput }} </h3>
     </div>
 </template>
 
@@ -65,6 +65,7 @@ export default {
     methods: {
         searchStock(e) {
             e.preventDefault(); // preventing default form behavior (sending data to a file)
+            console.log('about to search: ', this.userInput);
             let url = `http://localhost:3000/api/${this.userInput}`;
             axios.get(url)
             .then(res => {
@@ -98,7 +99,7 @@ export default {
             this.isOpen = false;
         },
         onArrowDown() {
-            if (this.filteredResults.length != 0) {
+            if (this.filteredResults.length > 0) {
                 if (this.arrowCounter < this.filteredResults.length -1) {
                         this.arrowCounter++;
                         console.log("this.arrowCounter: ", this.arrowCounter);
@@ -106,7 +107,7 @@ export default {
             }
         },
         onArrowUp() {
-            if (this.filteredResults.length != 0) {
+            if (this.filteredResults.length > 0) {
                 if (this.arrowCounter > 0) {
                     this.arrowCounter--;
                     console.log("this.arrowCounter: ", this.arrowCounter);
@@ -116,7 +117,8 @@ export default {
         onEnter() {
             // e.preventDefault();
             if (this.arrowCounter > -1) {
-                // this.userInput = this.filteredResults[this.arrowCounter].toString();     // I probably want to leave the default behavior here
+                this.userInput = this.filteredResults[this.arrowCounter];     // I probably want to leave the default behavior here
+                console.log('this.userInput: ', this.userInput);
                 this.arrowCounter = -1;
                 this.isOpen = false;
             }
