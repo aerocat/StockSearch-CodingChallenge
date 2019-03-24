@@ -1,12 +1,30 @@
 <template>
-    <div id="searchBar">
+    <div>
         <form @submit="searchStock">
-            <input type="text" list="stocks" v-model="userInput" placeholder="Enter a stock name or ticker">
-            <input type="submit" value="Search" class="btn">
-            <datalist id="stocks">
+            <input type="text"
+                   v-model="userInput"
+                   @input="onChange"
+                   @keydown.down="onArrowDown"
+                   @keydown.up="onArrowUp"
+                   @keydown.enter="onEnter"
+                   @keydown.esc="onEsc"
+                   placeholder="Enter a stock name or ticker"/>
+            <input type="submit" value="Search" class="btn"/>
+
+            <!-- <datalist id="stocks">
                 <option v-for="ticker in tickersAndCompanies" v-bind:key="ticker"> {{ticker}} </option>
-            </datalist>
+            </datalist> -->
         </form>
+
+        <div class="search-dropdown">
+            <ul v-show="isOpen" class="search-results">
+                    <li v-for="(result, index) in filteredResults"
+                        v-bind:key="index" 
+                        @click="setResult(result)"
+                        class="search-result"
+                        v-bind:class="{ 'is-active': index === arrowCounter }"> {{ index }} {{ result }} </li>
+            </ul>
+        </div>
         {{ userInput }}
     </div>
 </template>
@@ -19,7 +37,10 @@ export default {
     data() {
         return {
             userInput: '',
-            tickersAndCompanies: []
+            tickersAndCompanies: [],
+            isOpen: false,
+            filteredResults: [],
+            arrowCounter: -1
         }
     },
     created: function () {
@@ -51,6 +72,58 @@ export default {
             })
             .catch(err => console.log(err));
             this.userInput = '';
+        },
+        onChange() {
+            if (this.userInput === '') {
+                this.isOpen = false;
+                this.arrowCounter = -1;
+            } else {
+                this.isOpen = true;
+                this.filterResults();
+            }
+        },
+        filterResults() {
+            this.filteredResults = this.tickersAndCompanies.filter(company => 
+                // yields only companies where userInput appears in their string (a.k.a indexOf returns a non-negative index)
+                company.toLowerCase().indexOf(this.userInput.toLowerCase()) > -1
+            );
+            // if (this.filteredResults.length != 0) {
+            //     this.arrowCounter = 0;
+            //     console.log('set this.arrowcounter to: ', this.arrowCounter);
+            // }
+        },
+        setResult(selectedResult) {
+            this.arrowCounter = -1;
+            this.userInput = selectedResult;
+            this.isOpen = false;
+        },
+        onArrowDown() {
+            if (this.filteredResults.length != 0) {
+                if (this.arrowCounter < this.filteredResults.length -1) {
+                        this.arrowCounter++;
+                        console.log("this.arrowCounter: ", this.arrowCounter);
+                    }
+            }
+        },
+        onArrowUp() {
+            if (this.filteredResults.length != 0) {
+                if (this.arrowCounter > 0) {
+                    this.arrowCounter--;
+                    console.log("this.arrowCounter: ", this.arrowCounter);
+                }
+            }
+        },
+        onEnter() {
+            // e.preventDefault();
+            if (this.arrowCounter > -1) {
+                // this.userInput = this.filteredResults[this.arrowCounter].toString();     // I probably want to leave the default behavior here
+                this.arrowCounter = -1;
+                this.isOpen = false;
+            }
+        },
+        onEsc() {
+            this.isOpen = false;
+            this.arrowCounter = -1;
         }
     }
 }
@@ -58,9 +131,7 @@ export default {
 </script>
 
 <style scoped>
-#searchBar {
-    /* general styling to be added... */
-}
+
 form {
     display: flex;
 }
@@ -72,6 +143,31 @@ input[type="text"] {
 
 input[type="submit"] {
     flex: 2;
+}
+
+.search-dropdown {
+    flex: 8;
+}
+
+.search-results {
+    padding: 0;
+    margin: 0;
+    border: 1px solid #eeeeee;
+    height: 200px;
+    overflow: auto;
+}
+
+.search-result {
+    list-style: none;
+    text-align: left;
+    padding: 4px 2px;
+    cursor: pointer;
+}
+
+.search-result.is-active,
+.search-result:hover {
+    background-color: #4AAE9B;
+    color: white;
 }
 
 .btn {
