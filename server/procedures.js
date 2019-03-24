@@ -25,14 +25,23 @@ const getListOfCompanies = (clientResponse) => {
 
     Promise.all([promise1, promise2, promise3])
             .then(arrayOfArrays => {
-                allCompanies = [].concat.apply([], arrayOfArrays);                
                 // this snippet to flatten the final array was taken from https://stackoverflow.com/a/39048868
+                let array = [].concat.apply([], arrayOfArrays);    
+                allCompanies = removeDuplicates(array);            
             })
             .catch(err => console.log(err))
             .finally(() => {
-                // console.log(allCompanies);
-                clientResponse.send(allCompanies);
+                // console.log(allCompanies.sort());
+                // console.log(allCompanies.length);
+                clientResponse.send(allCompanies.sort());
             });
+}
+
+const removeDuplicates = array => {
+    var seen = {};
+    return array.filter(function(item) {
+        return seen.hasOwnProperty(item) ? false : (seen[item] = true);
+    });
 }
 
 /* Old working code
