@@ -55,7 +55,7 @@ export default {
                             }
                         },
                         series: [{
-                                    name: `${this.stockData.ticker} EOD Price`,
+                                    name: `${this.stockData.ticker} OHLC Price`,
                                     data: this.stockData.lineChartPrices,
                                     marker: {
                                         enabled: true,

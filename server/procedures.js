@@ -89,16 +89,17 @@ const getStockData = (ticker, clientResponse) => {
 
 const formatData = (data, clientResponse) => {
     let objectToSend = {
-        lineChart: [],
-        candleSticks: []
-    };
+                            lineChart: [],
+                            candleSticks: []
+                       };
     for (let row in data) {
         // Converting timestamp to Unix time (in milliseconds)
         let dateInUnixTimeMs = new Date(data[row].date).getTime();
 
         // Line Chart
+        let avgPrice = (data[row].open + data[row].close + data[row].high + data[row].low) / 4;
         objectToSend.lineChart.push([ dateInUnixTimeMs,
-                                      data[row].close ]);
+                                      avgPrice ]);
 
         // Candlesticks
         objectToSend.candleSticks.push([ dateInUnixTimeMs,
