@@ -65,8 +65,9 @@ export default {
     methods: {
         searchStock(e) {
             e.preventDefault(); // preventing default form behavior (sending data to a file)
-            console.log('about to search: ', this.userInput);
-            let url = `http://localhost:3000/api/${this.userInput}`;
+            let ticker = this.userInput.split('-')[0].trim();
+            console.log('about to search:', ticker);
+            let url = `http://localhost:3000/api/${ticker}`;
             axios.get(url)
             .then(res => {
                 this.$emit('received-stock-data', res.data);
