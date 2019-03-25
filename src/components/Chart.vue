@@ -4,7 +4,7 @@
         <!-- stockdata: {{ stockData }} -->
         <button class="toggle-chart-type" @click="toggleChartType"> Toggle {{ displayCandlestick ? "Line" : "Candlestick" }} Chart </button>
         <h3> {{ stockData.company }} ({{ stockData.ticker }}), 1-Month {{ !displayCandlestick ? "Line" : "Candlestick (Daily)" }} Chart </h3>
-        <highcharts :constructor-type="'stockChart'" :options="chartData"></highcharts>
+        <highcharts :constructor-type="'stockChart'" :options="chartData" :key="componentKey"></highcharts>
     </div>
 </template>
 
@@ -24,17 +24,20 @@ export default {
     },
     data() {
         return {
-            displayCandlestick: false
+            displayCandlestick: false,
+            componentKey: 0
         }
     },
     methods: {
         toggleChartType() {
             this.displayCandlestick = !this.displayCandlestick;
+            // This is used to forcefully destroy and recreate the chart object
+            this.componentKey++;
         }
     },
     computed: {
         chartData () {
-            console.log('running chartData');
+            console.log('this.componentKey: ' + this.componentKey);
             let { lineChartPrices, candleStickPrices, ticker } = this.stockData;
             if (!this.displayCandlestick) {
                  return {
@@ -67,7 +70,17 @@ export default {
             } else {
                 return {
                         rangeSelector: {
-                            selected: 1
+                            allButtonsEnabled: false,
+                            buttons: [
+                            //     {
+                            //     type: 'month',
+                            //     count: 1,
+                            //     text: '1m'
+                            // }
+                            ],
+                            labelStyle: {
+                                visibility: 'hidden'
+                            }
                         },
                         series: [{
                             type: 'candlestick',
