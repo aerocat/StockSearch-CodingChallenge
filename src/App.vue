@@ -2,7 +2,7 @@
   <div id="app">
     <Header />
     <SearchBar v-on:received-stock-data="renderStockData" />
-    <Chart v-bind:stockData="currentStockData"/>
+    <Chart v-bind:stockData="currentStockData" v-bind:toggleChart="showChart"/>
   </div>
 </template>
 
@@ -20,12 +20,14 @@ export default {
   },
   data() {
     return {
-      currentStockData: {}
+      currentStockData: {},
+      showChart: false
     }
   },
   methods: {
     renderStockData(data) {
       this.currentStockData = data;
+      this.showChart = true;
     }
   }
 }

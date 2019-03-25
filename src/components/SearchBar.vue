@@ -25,7 +25,7 @@
                         v-bind:class="{ 'is-active': index === arrowCounter }"> {{ result }} </li>
             </ul>
         </div>
-        <h3> userInput is: {{ userInput }} </h3>
+        <!-- <h3> userInput is: {{ userInput }} </h3> -->
     </div>
 </template>
 
@@ -66,11 +66,17 @@ export default {
         searchStock(e) {
             e.preventDefault(); // preventing default form behavior (sending data to a file)
             let ticker = this.userInput.split('-')[0].trim();
+            let companyName = this.userInput.split('-')[1].trim();
             console.log('about to search:', ticker);
+            // TODO: Add validation so user can't search something invalid
+            // like if ticker not in tickers, disable search button
+
             let url = `http://localhost:3000/api/${ticker}`;
             axios.get(url)
             .then(res => {
-                this.$emit('received-stock-data', res.data);
+                this.$emit('received-stock-data', { prices: res.data,
+                                                    ticker: ticker.toUpperCase(),
+                                                    company: companyName});
             })
             .catch(err => console.log(err));
             this.userInput = '';
