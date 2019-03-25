@@ -37,8 +37,8 @@ export default {
     },
     computed: {
         chartData () {
-            console.log('this.componentKey: ' + this.componentKey);
             let { lineChartPrices, candleStickPrices, ticker } = this.stockData;
+            
             if (!this.displayCandlestick) {
                  return {
                         rangeSelector: {
@@ -55,8 +55,8 @@ export default {
                             }
                         },
                         series: [{
-                                    name: `${this.stockData.ticker} OHLC Price`,
-                                    data: this.stockData.lineChartPrices,
+                                    name: `${ticker} OHLC Price`,
+                                    data: lineChartPrices,
                                     marker: {
                                         enabled: true,
                                         radius: 3
@@ -84,8 +84,8 @@ export default {
                         },
                         series: [{
                             type: 'candlestick',
-                            name: `${this.stockData.ticker} Price`,
-                            data: this.stockData.candleStickPrices,
+                            name: `${ticker} Price`,
+                            data: candleStickPrices,
                             dataGrouping: {
                                 units: [
                                     [
