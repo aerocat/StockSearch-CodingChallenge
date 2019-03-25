@@ -79,24 +79,30 @@ const getStockData = (ticker, clientResponse) => {
     let url = `https://api.iextrading.com/1.0/stock/${ticker}/chart/1m`;
     axios.get(url)
         .then(res => {
-            // manipulate/parse data in other function
-            manipulateData(res.data, clientResponse);
+            // format data in a way the chart can understand
+            formatData(res.data, clientResponse);
         })
         .catch(err => {
             console.log(err);
         });
 } 
 
-const manipulateData = (data, clientResponse) => {
-    let manipulatedData = [];
+const formatData = (data, clientResponse) => {
+    let objectToSend = {
+        lineChart: [],
+        candleSticks: []
+    };
     for (let row in data) {
-        // console.log(data[row].date.getTime());
-        // console.log(data[row].close);
-        // TODO COMPUTE AVERAGE instead of return price of close at end of day...
+        // Converting timestamp to Unix time (in milliseconds)
         let dateInUnixTimeMs = new Date(data[row].date).getTime();
-        manipulatedData.push([dateInUnixTimeMs, data[row].close]);
+
+        // Line Chart
+        objectToSend.lineChart.push([dateInUnixTimeMs, data[row].close]);
+
+        // Candlesticks
+        // ...
     }
-    clientResponse.send(manipulatedData);
+    clientResponse.send(objectToSend);
 }
 
 module.exports = {

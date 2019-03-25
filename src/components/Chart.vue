@@ -2,7 +2,8 @@
     <div id="chartArea" v-show="toggleChart">
         <!-- <p> Chart will go here </p> -->
         <!-- stockdata: {{ stockData }} -->
-        <h3> {{ stockData.company }} ({{ stockData.ticker }}), 1-Month Line Chart </h3>
+        <button @click="toggleCandlesticks"> Toggle Candlestick Chart </button>
+        <h3> {{ stockData.company }} ({{ stockData.ticker }}), 1-Month {{ typeOfChart }} Chart </h3>
         <highcharts :constructor-type="'stockChart'" :options="chartData"></highcharts>
     </div>
 </template>
@@ -21,40 +22,73 @@ export default {
         highcharts: Chart,
 
     },
+    data() {
+        return {
+            displayCandlesticks: false,
+            typeOfChart: "Line"
+        }
+    },
+    methods: {
+        toggleCandlesticks() {
+            // e.preventDefault();
+            this.displayCandlesticks = true;
+            this.typeOfChart = "Candlesticks";
+        }
+    },
     computed: {
         chartData () {
-            return (
-                    {
-                    rangeSelector: {
-                        allButtonsEnabled: false,
-                        buttons: [
-                        //     {
-                        //     type: 'month',
-                        //     count: 1,
-                        //     text: '1m'
-                        // }
-                        ],
-                        labelStyle: {
-                            visibility: 'hidden'
-                        }
-                    },
-                    series: [{
-                                name: `${this.stockData.ticker} EOD Price`,
-                                data: this.stockData.prices,
-                                marker: {
-                                    enabled: true,
-                                    radius: 3
-                                },
-                                shadow: true,
-                                tooltip: {
-                                    valueDecimals: 2
-                                }
-                            }],
-                    title: {
-                            // text: `${this.stockData.company} 1-Month Chart`
-                    }
+            let { lineChartPrices, candleSticksPrices, ticker } = this.stockData;
+            if (!this.displayCandlesticks) {
+                 return {
+                        rangeSelector: {
+                            allButtonsEnabled: false,
+                            buttons: [
+                            //     {
+                            //     type: 'month',
+                            //     count: 1,
+                            //     text: '1m'
+                            // }
+                            ],
+                            labelStyle: {
+                                visibility: 'hidden'
+                            }
+                        },
+                        series: [{
+                                    name: `${ticker} EOD Price`,
+                                    data: lineChartPrices,
+                                    marker: {
+                                        enabled: true,
+                                        radius: 3
+                                    },
+                                    shadow: true,
+                                    tooltip: {
+                                        valueDecimals: 2
+                                    }
+                                }]
                 }
-            )
+            } else {
+                return {
+                        rangeSelector: {
+                            selected: 1
+                        },
+                        series: [{
+                            type: 'candlestick',
+                            name: `${ticker} EOD Price`,
+                            data: candleSticksPrices,
+                            dataGrouping: {
+                                units: [
+                                    [
+                                        'week', // unit name
+                                        [1] // allowed multiples
+                                    ], [
+                                        'month',
+                                        [1, 2, 3, 4, 6]
+                                    ]
+                                ]
+                            }
+                        }]
+                }
+            }
         }
     }
 }

@@ -74,9 +74,10 @@ export default {
             let url = `http://localhost:3000/api/${ticker}`;
             axios.get(url)
             .then(res => {
-                this.$emit('received-stock-data', { prices: res.data,
+                this.$emit('received-stock-data', { lineChartPrices: res.data.lineChart,
+                                                    candleSticksPrices: res.data.candleSticks,
                                                     ticker: ticker.toUpperCase(),
-                                                    company: companyName});
+                                                    company: companyName });
             })
             .catch(err => console.log(err));
             this.userInput = '';
