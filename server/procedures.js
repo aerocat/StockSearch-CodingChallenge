@@ -88,10 +88,15 @@ const getStockData = (ticker, clientResponse) => {
 } 
 
 const manipulateData = (data, clientResponse) => {
-    // do stuff
-    // ...
-
-    clientResponse.send(data);
+    let manipulatedData = [];
+    for (let row in data) {
+        // console.log(data[row].date.getTime());
+        // console.log(data[row].close);
+        // TODO COMPUTE AVERAGE instead of return price of close at end of day...
+        let dateInUnixTimeMs = new Date(data[row].date).getTime();
+        manipulatedData.push([dateInUnixTimeMs, data[row].close]);
+    }
+    clientResponse.send(manipulatedData);
 }
 
 module.exports = {
