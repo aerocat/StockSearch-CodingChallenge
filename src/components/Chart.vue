@@ -32,7 +32,7 @@ export default {
         toggleCandlesticks() {
             // e.preventDefault();
             this.displayCandlesticks = true;
-            this.typeOfChart = "Candlesticks";
+            this.typeOfChart = "Candlestick (Daily)";
         }
     },
     computed: {
@@ -73,7 +73,7 @@ export default {
                         },
                         series: [{
                             type: 'candlestick',
-                            name: `${ticker} EOD Price`,
+                            name: `${ticker} Price`,
                             data: candleSticksPrices,
                             dataGrouping: {
                                 units: [

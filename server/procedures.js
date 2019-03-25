@@ -97,10 +97,16 @@ const formatData = (data, clientResponse) => {
         let dateInUnixTimeMs = new Date(data[row].date).getTime();
 
         // Line Chart
-        objectToSend.lineChart.push([dateInUnixTimeMs, data[row].close]);
+        objectToSend.lineChart.push([ dateInUnixTimeMs,
+                                      data[row].close ]);
 
         // Candlesticks
-        // ...
+        objectToSend.candleSticks.push([ dateInUnixTimeMs,
+                                         data[row].open,
+                                         data[row].high,
+                                         data[row].low,
+                                         data[row].close,
+                                        ]);
     }
     clientResponse.send(objectToSend);
 }
