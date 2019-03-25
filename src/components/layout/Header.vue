@@ -1,6 +1,6 @@
 <template>
     <header class="header">
-        <h1> Stock Chart (1 month) </h1>
+        <h1> Stock Chart Search (1 month) </h1>
     </header>
 </template>
 
