@@ -2,8 +2,8 @@
     <div id="chartArea" v-show="toggleChart">
         <!-- <p> Chart will go here </p> -->
         <!-- stockdata: {{ stockData }} -->
-        <button @click="toggleCandlesticks"> Toggle Candlestick Chart </button>
-        <h3> {{ stockData.company }} ({{ stockData.ticker }}), 1-Month {{ typeOfChart }} Chart </h3>
+        <button class="toggle-chart-type" @click="toggleChartType"> Toggle {{ displayCandlestick ? "Line" : "Candlestick" }} Chart </button>
+        <h3> {{ stockData.company }} ({{ stockData.ticker }}), 1-Month {{ !displayCandlestick ? "Line" : "Candlestick (Daily)" }} Chart </h3>
         <highcharts :constructor-type="'stockChart'" :options="chartData"></highcharts>
     </div>
 </template>
@@ -24,21 +24,19 @@ export default {
     },
     data() {
         return {
-            displayCandlesticks: false,
-            typeOfChart: "Line"
+            displayCandlestick: false
         }
     },
     methods: {
-        toggleCandlesticks() {
-            // e.preventDefault();
-            this.displayCandlesticks = true;
-            this.typeOfChart = "Candlestick (Daily)";
+        toggleChartType() {
+            this.displayCandlestick = !this.displayCandlestick;
         }
     },
     computed: {
         chartData () {
-            let { lineChartPrices, candleSticksPrices, ticker } = this.stockData;
-            if (!this.displayCandlesticks) {
+            console.log('running chartData');
+            let { lineChartPrices, candleStickPrices, ticker } = this.stockData;
+            if (!this.displayCandlestick) {
                  return {
                         rangeSelector: {
                             allButtonsEnabled: false,
@@ -54,8 +52,8 @@ export default {
                             }
                         },
                         series: [{
-                                    name: `${ticker} EOD Price`,
-                                    data: lineChartPrices,
+                                    name: `${this.stockData.ticker} EOD Price`,
+                                    data: this.stockData.lineChartPrices,
                                     marker: {
                                         enabled: true,
                                         radius: 3
@@ -73,8 +71,8 @@ export default {
                         },
                         series: [{
                             type: 'candlestick',
-                            name: `${ticker} Price`,
-                            data: candleSticksPrices,
+                            name: `${this.stockData.ticker} Price`,
+                            data: this.stockData.candleStickPrices,
                             dataGrouping: {
                                 units: [
                                     [
@@ -104,5 +102,9 @@ export default {
     padding: 20px 20px;
     text-align: left;
     /* border: 1px solid #333; */
+}
+
+.toggle-chart-type {
+    float: right;
 }
 </style>

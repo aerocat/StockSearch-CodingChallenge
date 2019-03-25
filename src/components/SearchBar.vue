@@ -75,7 +75,7 @@ export default {
             axios.get(url)
             .then(res => {
                 this.$emit('received-stock-data', { lineChartPrices: res.data.lineChart,
-                                                    candleSticksPrices: res.data.candleSticks,
+                                                    candleStickPrices: res.data.candleSticks,
                                                     ticker: ticker.toUpperCase(),
                                                     company: companyName });
             })
