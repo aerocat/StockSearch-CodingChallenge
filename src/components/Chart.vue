@@ -2,6 +2,7 @@
     <div id="chartArea" v-show="toggleChart">
         <!-- <p> Chart will go here </p> -->
         <!-- stockdata: {{ stockData }} -->
+        <h3> {{ stockData.company }} ({{ stockData.ticker }}), 1-Month Line Chart </h3>
         <highcharts :constructor-type="'stockChart'" :options="chartData"></highcharts>
     </div>
 </template>
@@ -38,7 +39,7 @@ export default {
                         }
                     },
                     series: [{
-                                name: `${this.stockData.ticker} Stock Price`,
+                                name: `${this.stockData.ticker} EOD Price`,
                                 data: this.stockData.prices,
                                 marker: {
                                     enabled: true,
@@ -50,7 +51,7 @@ export default {
                                 }
                             }],
                     title: {
-                            text: `${this.stockData.company} 1-Month Chart`
+                            // text: `${this.stockData.company} 1-Month Chart`
                     }
                 }
             )
@@ -67,7 +68,7 @@ export default {
     margin-left: 20px;
     /* Find a way to align to center? */
     padding: 20px 20px;
-    text-align: center;
-    border: 1px solid #333;
+    text-align: left;
+    /* border: 1px solid #333; */
 }
 </style>
