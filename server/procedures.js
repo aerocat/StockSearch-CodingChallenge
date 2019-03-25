@@ -63,7 +63,7 @@ const streamToPromise = (path) => {
         fs.createReadStream(path)  
             .pipe(csv())
             .on('data', (row) => {
-                lst.push(row.Symbol + " - " + row.Name);
+                lst.push(row.Name + " - " + row.Symbol);
             })
             .on('end', () => {
                 resolve(lst);

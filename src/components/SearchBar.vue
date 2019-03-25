@@ -65,8 +65,8 @@ export default {
     methods: {
         searchStock(e) {
             e.preventDefault(); // preventing default form behavior (sending data to a file)
-            let ticker = this.userInput.split('-')[0].trim();
-            let companyName = this.userInput.split('-')[1].trim();
+            let ticker = this.userInput.split('-')[1].trim();
+            let companyName = this.userInput.split('-')[0].trim();
             console.log('about to search:', ticker);
             // TODO: Add validation so user can't search something invalid
             // like if ticker not in tickers, disable search button
