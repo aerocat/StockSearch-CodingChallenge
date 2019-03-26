@@ -167,7 +167,7 @@ input[type="submit"] {
 }
 
 .search-dropdown {
-    flex: 8;
+    /* flex: 8; */
 }
 
 .search-results {

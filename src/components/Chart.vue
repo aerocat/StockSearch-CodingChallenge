@@ -1,10 +1,23 @@
 <template>
-    <div id="chartArea" v-show="toggleChart">
-        <!-- <p> Chart will go here </p> -->
-        <!-- stockdata: {{ stockData }} -->
-        <button class="toggle-chart-type" @click="toggleChartType"> Toggle {{ displayCandlestick ? "Line" : "Candlestick" }} Chart </button>
-        <h3> {{ stockData.company }} ({{ stockData.ticker }}), 1-Month {{ !displayCandlestick ? "Line" : "Candlestick (Daily)" }} Chart </h3>
-        <highcharts :constructor-type="'stockChart'" :options="chartData" :key="componentKey"></highcharts>
+    <div class="chartComponent">
+        <div v-if="!toggleChart" class="empty-chart">
+             <h3> Hi! Please search a stock in the text box above :) </h3>
+        </div>
+        <div class="chartContainer" v-if="toggleChart">
+            <div class="chart-toggle">
+                <div class="chartTitle">
+                        <h3> {{ stockData.company }} ({{ stockData.ticker }}), 1-Month {{ !displayCandlestick ? "Line" : "Candlestick (Daily)" }} Chart </h3>
+                </div>
+                    <img src="../../assets/icons/line-chart.png" v-if="displayCandlestick"/>
+                    <img src="../../assets/icons/candlesticks.png" v-if="!displayCandlestick" class="smaller-img"/>
+                    <button @click="toggleChartType">  Toggle {{ displayCandlestick ? "Line" : "Candlestick" }} Chart </button>
+        </div>
+          <div class="chartArea">
+                <div class="chart">
+                    <highcharts :constructor-type="'stockChart'" :options="chartData" :key="componentKey"></highcharts>
+                </div>
+          </div>
+    </div>
     </div>
 </template>
 
@@ -19,8 +32,7 @@ export default {
     name: "Chart",
     props: ['stockData', 'toggleChart'],
     components: {
-        highcharts: Chart,
-
+        highcharts: Chart
     },
     data() {
         return {
@@ -107,17 +119,56 @@ export default {
 </script>
 
 <style scoped>
-#chartArea {
-    width: 800px;
+
+.chartComponent {
+    width: 1000px;
+    height: 600px;
     margin-top: 20px;
     margin-left: 20px;
-    /* Find a way to align to center? */
-    padding: 20px 20px;
+    padding: 0 20px;
     text-align: left;
-    /* border: 1px solid #333; */
+    border: 1px dashed #333;
+    display: flex;
+    justify-content: center;
 }
 
-.toggle-chart-type {
-    float: right;
+.empty-chart {
+    height: 50px;
+    flex-basis: 480px;
+    align-self: center;
 }
+
+.chartTitle {
+    flex: 10;
+    height: 25px;
+    align-self: center;
+}
+
+.chart-toggle {
+    display: flex;
+    flex-basis: 300px;
+    height: 80px;
+}
+
+.chart-toggle img {
+    width: 80px;
+}
+
+.chart-toggle button {
+    flex: 3;
+    height: 25px;
+    align-self: center;
+}
+
+.smaller-img {
+    width: 65px !important;
+    height: 65px;
+    align-self: center;
+}
+
+.chartContainer {
+    flex-basis: 1000px;
+}
+
+
 </style>
