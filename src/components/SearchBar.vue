@@ -22,7 +22,6 @@
                     <li v-if="filteredResults.length == 0"> No Stocks Found :( </li>
             </ul>
         </div>
-        <!-- <h3> userInput is: {{ userInput }} </h3> -->
     </div>
 </template>
 
@@ -50,8 +49,12 @@ export default {
             .catch(err => console.log(err));
     },
     methods: {
+
+        // Parses the ticker from text inserted in the search bar,
+        // queries the API and sends the response to the App component
         searchStock(e) {
             e.preventDefault(); // preventing default form behavior (sending data to a file)
+
             if (this.filteredResults.length > 0 && this.userInput != '') {
                 let ticker = this.userInput.split('-')[1].trim();
                 let companyName = this.userInput.split('-')[0].trim();
@@ -69,12 +72,16 @@ export default {
             this.resetSearch();
 
         },
+
+        // Listens for changes in the entered text input; potentially auto-completes the field
         onChange() {
+
             // If user hasn't entered text or has deleted it
             if (this.userInput === '') {
                 this.isOpen = false;
                 this.arrowCounter = -1;
             }
+
             // else, input is valid
             else {
                 this.isOpen = true;
@@ -89,13 +96,16 @@ export default {
                 }
             }
         },
+
+        // Computes and stores matching results in an array
         filterResults() {
             this.filteredResults = this.tickersAndCompanies.filter(company => 
                 // yields only companies where userInput appears in their string (a.k.a indexOf returns a non-negative index)
                 company.toLowerCase().indexOf(this.userInput.toLowerCase()) > -1
             );
-            // console.log('Matching results:', this.filteredResults.length);
         },
+
+        // Fills the search bar with a result (used by auto-complete or when a user clicks on a result)
         setResult(selectedResult) {
             if (selectedResult != undefined) {
                 this.arrowCounter = -1;
@@ -103,6 +113,8 @@ export default {
                 this.isOpen = false;
             }
         },
+
+        // Increases the index of the selected result, so that the class is-active can be rendered onto it
         onArrowDown() {
             if (this.filteredResults.length > 0) {
                 if (this.arrowCounter < this.filteredResults.length -1) {
@@ -110,6 +122,8 @@ export default {
                     }
             }
         },
+
+        // Decreases the index of the selected result, so that the class is-active can be rendered onto it
         onArrowUp() {
             if (this.filteredResults.length > 0) {
                 if (this.arrowCounter > 0) {
@@ -117,14 +131,20 @@ export default {
                 }
             }
         },
+
+        // Immediately runs a search on the selected result when a user presses the Enter key
         onEnter() {
             if (this.arrowCounter > -1) {
-                this.userInput = this.filteredResults[this.arrowCounter];     // I probably want to leave the default behavior here
+                this.userInput = this.filteredResults[this.arrowCounter];
             }
         },
+
+        // Resets search and closes search results when a user presses the Escape key
         onEsc() {
             this.resetSearch();
         },
+
+        // Helper to reset some component properties after a search is run
         resetSearch() {
             this.userInput = '';
             this.arrowCounter = -1;
@@ -132,14 +152,6 @@ export default {
             this.filteredResults = [];
         }
     }
-    // watch: {
-    //     userInput: function() {
-    //         if (this.userInput == undefined) {
-    //             console.log('reassigned userInput to empty string');
-    //             this.userInput = '';
-    //         }
-    //     }
-    // }
 }
 
 </script>

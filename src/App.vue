@@ -25,6 +25,8 @@ export default {
     }
   },
   methods: {
+
+    // Listens for data emitted by the SearchBar component, which is then passed to Chart as a prop
     renderStockData(data) {
       this.dataFromAPI = data;
       this.showChart = true;
@@ -50,7 +52,6 @@ export default {
   display: flex;
   flex-direction: column;
 }
-
 
 .chart-component {
   align-self: center;

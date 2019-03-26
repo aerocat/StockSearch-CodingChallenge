@@ -41,6 +41,8 @@ export default {
         }
     },
     methods: {
+        
+        // Flip boolean variable to display the line or the candlestick charts
         toggleChartType() {
             this.displayCandlestick = !this.displayCandlestick;
             // This is used to forcefully destroy and recreate the chart object
@@ -48,20 +50,17 @@ export default {
         }
     },
     computed: {
+
+        // Computed property to provide the highcharts component with the data it needs
         chartData () {
             let { lineChartPrices, candleStickPrices, ticker } = this.stockData;
             
+            // Display Line Chart
             if (!this.displayCandlestick) {
                  return {
                         rangeSelector: {
                             allButtonsEnabled: false,
-                            buttons: [
-                            //     {
-                            //     type: 'month',
-                            //     count: 1,
-                            //     text: '1m'
-                            // }
-                            ],
+                            buttons: [],
                             labelStyle: {
                                 visibility: 'hidden'
                             }
@@ -79,17 +78,11 @@ export default {
                                     }
                                 }]
                 }
-            } else {
+            } else { // Display Candlestick Chart
                 return {
                         rangeSelector: {
                             allButtonsEnabled: false,
-                            buttons: [
-                            //     {
-                            //     type: 'month',
-                            //     count: 1,
-                            //     text: '1m'
-                            // }
-                            ],
+                            buttons: [],
                             labelStyle: {
                                 visibility: 'hidden'
                             }
@@ -168,6 +161,5 @@ export default {
 .chart-container {
     flex-basis: 1000px;
 }
-
 
 </style>
