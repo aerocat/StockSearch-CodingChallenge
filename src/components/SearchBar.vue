@@ -28,7 +28,7 @@
 
 <script>
 import axios from 'axios';
-import { setInterval, setTimeout } from 'timers';
+import { setTimeout } from 'timers';
 
 export default {
     name: "SearchBar",
@@ -55,10 +55,6 @@ export default {
             if (this.filteredResults.length > 0 && this.userInput != '') {
                 let ticker = this.userInput.split('-')[1].trim();
                 let companyName = this.userInput.split('-')[0].trim();
-                
-                console.log('about to search:', ticker);
-                // TODO: Add validation so user can't search something invalid
-                // like if ticker not in tickers, disable search button
 
                 let url = `http://localhost:3000/api/${ticker}`;
                 axios.get(url)
@@ -111,7 +107,6 @@ export default {
             if (this.filteredResults.length > 0) {
                 if (this.arrowCounter < this.filteredResults.length -1) {
                         this.arrowCounter++;
-                        console.log("this.arrowCounter: ", this.arrowCounter);
                     }
             }
         },
@@ -119,7 +114,6 @@ export default {
             if (this.filteredResults.length > 0) {
                 if (this.arrowCounter > 0) {
                     this.arrowCounter--;
-                    console.log("this.arrowCounter: ", this.arrowCounter);
                 }
             }
         },
@@ -132,7 +126,6 @@ export default {
             this.resetSearch();
         },
         resetSearch() {
-            console.log('resetting search');
             this.userInput = '';
             this.arrowCounter = -1;
             this.isOpen = false;
