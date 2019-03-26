@@ -2,7 +2,7 @@
 
 This project was built as a coding challenge for an unnamed firm in Chicago. It's a web application that allows a user to search for a stock or public company (listed on NASDAQ, NYSE or AMEX exchanges) and retrieve a chart for the stock movements for the past month.
 
-The web app utilizes Vue.js on the front-end and Node.js/Express on the back-end.
+The web app utilizes Vue.js on the front-end and Node.js/Express on the back-end. Highcharts is used to render the charts.
 
 ### How to install this project:
 
