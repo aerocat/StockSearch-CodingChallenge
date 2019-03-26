@@ -2,7 +2,7 @@
   <div id="app">
     <Header />
     <SearchBar v-on:received-stock-data="renderStockData" />
-    <Chart v-bind:stockData="dataFromAPI" v-bind:toggleChart="showChart"/>
+    <Chart class="chart-component" v-bind:stockData="dataFromAPI" v-bind:toggleChart="showChart"/>
   </div>
 </template>
 
@@ -47,5 +47,13 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  display: flex;
+  flex-direction: column;
 }
+
+
+.chart-component {
+  align-self: center;
+}
+
 </style>

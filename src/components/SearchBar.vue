@@ -89,7 +89,7 @@ export default {
                     this.arrowCounter = 0;
                     setTimeout(() => {
                         this.setResult(this.filteredResults[0]);
-                    }, 350);
+                    }, 500);
                 }
             }
         },
@@ -164,10 +164,6 @@ input[type="text"] {
 
 input[type="submit"] {
     flex: 2;
-}
-
-.search-dropdown {
-    /* flex: 8; */
 }
 
 .search-results {

@@ -1,18 +1,18 @@
 <template>
-    <div class="chartComponent">
+    <div class="chart-component">
         <div v-if="!toggleChart" class="empty-chart">
              <h3> Hi! Please search a stock in the text box above :) </h3>
         </div>
-        <div class="chartContainer" v-if="toggleChart">
+        <div class="chart-container" v-if="toggleChart">
             <div class="chart-toggle">
-                <div class="chartTitle">
+                <div class="chart-title">
                         <h3> {{ stockData.company }} ({{ stockData.ticker }}), 1-Month {{ !displayCandlestick ? "Line" : "Candlestick (Daily)" }} Chart </h3>
                 </div>
                     <img src="../../assets/icons/line-chart.png" v-if="displayCandlestick"/>
                     <img src="../../assets/icons/candlesticks.png" v-if="!displayCandlestick" class="smaller-img"/>
                     <button @click="toggleChartType">  Toggle {{ displayCandlestick ? "Line" : "Candlestick" }} Chart </button>
         </div>
-          <div class="chartArea">
+          <div class="chart-area">
                 <div class="chart">
                     <highcharts :constructor-type="'stockChart'" :options="chartData" :key="componentKey"></highcharts>
                 </div>
@@ -120,12 +120,11 @@ export default {
 
 <style scoped>
 
-.chartComponent {
+.chart-component {
     width: 1000px;
     height: 600px;
-    margin-top: 20px;
-    margin-left: 20px;
-    padding: 0 20px;
+    margin-top: 100px;
+    padding: 20px;
     text-align: left;
     border: 1px dashed #333;
     display: flex;
@@ -138,7 +137,7 @@ export default {
     align-self: center;
 }
 
-.chartTitle {
+.chart-title {
     flex: 10;
     height: 25px;
     align-self: center;
@@ -166,7 +165,7 @@ export default {
     align-self: center;
 }
 
-.chartContainer {
+.chart-container {
     flex-basis: 1000px;
 }
 
