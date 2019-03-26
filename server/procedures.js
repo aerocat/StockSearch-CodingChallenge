@@ -7,19 +7,11 @@ const NASDAQ = '../assets/csv/NASDAQ.csv';
 const NYSE = '../assets/csv/NYSE.csv';
 const AMEX = '../assets/csv/AMEX.csv';
 
+// Parses the 3 CSVs to get a list of all companies and then sends it to the client
 const getListOfCompanies = (clientResponse) => {
-    let lst = [
-        "AAPL - Apple Inc." ,
-        "FB - Facebook Inc." ,
-        "AMZN - Amazon Inc." ,
-        "MSFT - Microsoft Inc.",
-        "YOOOOOOO - YOOOO Inc."
-    ];
 
     let allCompanies = [];
     let promise1 = streamToPromise(NASDAQ);
-    // promise.then(data => console.log('data is', data))
-    // .catch(err => console.log("error is:", err));
     let promise2 = streamToPromise(NYSE);
     let promise3 = streamToPromise(AMEX);
 
@@ -31,12 +23,12 @@ const getListOfCompanies = (clientResponse) => {
             })
             .catch(err => console.log(err))
             .finally(() => {
-                // console.log(allCompanies.sort());
-                // console.log(allCompanies.length);
                 clientResponse.send(allCompanies.sort());
             });
 }
 
+// Little helper function to remove duplicates from a list, taken from https://stackoverflow.com/a/9229821
+// Note: This is a quick fix. A proper solution would have been to parse each result into a Set
 const removeDuplicates = array => {
     var seen = {};
     return array.filter(function(item) {
@@ -44,19 +36,7 @@ const removeDuplicates = array => {
     });
 }
 
-/* Old working code
-    // let lst2 = [];
-    // fs.createReadStream(NASDAQ)  
-    //     .pipe(csv())
-    //     .on('data', (row) => {
-    //         lst2.push(row.Symbol + " - " + row.Name);
-    //     })
-    //     .on('end', () => {      // this is my .then()
-    //         console.log('CSV file successfully processed:');
-    //         console.log(lst2);  // do stuff;
-    //     });
-*/
-
+// Converts a Node stream into a Promise
 const streamToPromise = (path) => {
     return new Promise((resolve, reject) => {
         let lst = [];
@@ -74,12 +54,11 @@ const streamToPromise = (path) => {
     });
 }
 
-
+// Retrieves stock data from IEX Trading API and sends it to formatData
 const getStockData = (ticker, clientResponse) => {
     let url = `https://api.iextrading.com/1.0/stock/${ticker}/chart/1m`;
     axios.get(url)
         .then(res => {
-            // format data in a way the chart can understand
             formatData(res.data, clientResponse);
         })
         .catch(err => {
@@ -87,6 +66,7 @@ const getStockData = (ticker, clientResponse) => {
         });
 } 
 
+// Formats the data in a way that the charts can understand, then sends it back the client
 const formatData = (data, clientResponse) => {
     let objectToSend = {
                             lineChart: [],
