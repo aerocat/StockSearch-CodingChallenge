@@ -18,9 +18,10 @@ After installing the project, you should run the back-end:
 cd server
 node app.js
 ```
-*hint:* don't run ```node server/app.js``` from the main project directory. The app won't be able to find the CSV folder...
+*hint: don't run ```node server/app.js``` from the main project directory. The app won't be able to find the CSV folder...*
 
-and in a separate Terminal/bash window:
+Then, run the front-end in a separate Terminal/bash window:
+
 ```sh
 npm run serve
 ```
