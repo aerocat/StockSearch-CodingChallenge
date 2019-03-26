@@ -126,7 +126,6 @@ export default {
         onEnter() {
             if (this.arrowCounter > -1) {
                 this.userInput = this.filteredResults[this.arrowCounter];     // I probably want to leave the default behavior here
-                this.resetSearch();
             }
         },
         onEsc() {
