@@ -28,6 +28,7 @@
 
 <script>
 import axios from 'axios';
+import { setInterval, setTimeout } from 'timers';
 
 export default {
     name: "SearchBar",
@@ -51,23 +52,26 @@ export default {
     methods: {
         searchStock(e) {
             e.preventDefault(); // preventing default form behavior (sending data to a file)
-            let ticker = this.userInput.split('-')[1].trim();
-            let companyName = this.userInput.split('-')[0].trim();
-            
-            console.log('about to search:', ticker);
-            // TODO: Add validation so user can't search something invalid
-            // like if ticker not in tickers, disable search button
+            if (this.filteredResults.length > 0 && this.userInput != '') {
+                let ticker = this.userInput.split('-')[1].trim();
+                let companyName = this.userInput.split('-')[0].trim();
+                
+                console.log('about to search:', ticker);
+                // TODO: Add validation so user can't search something invalid
+                // like if ticker not in tickers, disable search button
 
-            let url = `http://localhost:3000/api/${ticker}`;
-            axios.get(url)
-            .then(res => {
-                this.$emit('received-stock-data', { lineChartPrices: res.data.lineChart,
-                                                    candleStickPrices: res.data.candleSticks,
-                                                    ticker: ticker.toUpperCase(),
-                                                    company: companyName });
-            })
-            .catch(err => console.log(err));
-            this.userInput = '';
+                let url = `http://localhost:3000/api/${ticker}`;
+                axios.get(url)
+                .then(res => {
+                    this.$emit('received-stock-data', { lineChartPrices: res.data.lineChart,
+                                                        candleStickPrices: res.data.candleSticks,
+                                                        ticker: ticker.toUpperCase(),
+                                                        company: companyName });
+                })
+                .catch(err => console.log(err));
+            }
+            this.resetSearch();
+
         },
         onChange() {
             // If user hasn't entered text or has deleted it
@@ -79,10 +83,13 @@ export default {
             else {
                 this.isOpen = true;
                 this.filterResults();
-
+                
                 // Autocomplete field if there's only one result found
-                if (this.filteredResults.length == 1) {
-                    this.setResult(this.filteredResults[0]);
+                if (this.filteredResults.length === 1) {
+                    this.arrowCounter = 0;
+                    setTimeout(() => {
+                        this.setResult(this.filteredResults[0]);
+                    }, 350);
                 }
             }
         },
@@ -91,12 +98,14 @@ export default {
                 // yields only companies where userInput appears in their string (a.k.a indexOf returns a non-negative index)
                 company.toLowerCase().indexOf(this.userInput.toLowerCase()) > -1
             );
-            console.log('Matching results:', this.filteredResults.length);
+            // console.log('Matching results:', this.filteredResults.length);
         },
         setResult(selectedResult) {
-            this.arrowCounter = -1;
-            this.userInput = selectedResult;
-            this.isOpen = false;
+            if (selectedResult != undefined) {
+                this.arrowCounter = -1;
+                this.userInput = selectedResult;
+                this.isOpen = false;
+            }
         },
         onArrowDown() {
             if (this.filteredResults.length > 0) {
@@ -115,19 +124,30 @@ export default {
             }
         },
         onEnter() {
-            // e.preventDefault();
             if (this.arrowCounter > -1) {
                 this.userInput = this.filteredResults[this.arrowCounter];     // I probably want to leave the default behavior here
-                console.log('this.userInput: ', this.userInput);
-                this.arrowCounter = -1;
-                this.isOpen = false;
+                this.resetSearch();
             }
         },
         onEsc() {
-            this.isOpen = false;
+            this.resetSearch();
+        },
+        resetSearch() {
+            console.log('resetting search');
+            this.userInput = '';
             this.arrowCounter = -1;
+            this.isOpen = false;
+            this.filteredResults = [];
         }
     }
+    // watch: {
+    //     userInput: function() {
+    //         if (this.userInput == undefined) {
+    //             console.log('reassigned userInput to empty string');
+    //             this.userInput = '';
+    //         }
+    //     }
+    // }
 }
 
 </script>
